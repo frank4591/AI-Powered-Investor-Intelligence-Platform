@@ -7,6 +7,7 @@ from langchain_openai import AzureOpenAIEmbeddings
 from ingestion.pdf_to_markdown import PDFToMarkdownConverter
 from ingestion.semantic_chunker import chunk_markdown
 from vectorstore.azure_ai_search import AzureAISearchVectorStore
+from vectorstore.create_index import create_index
 from rag.kpi_extractor_rag import extract_financial_metrics
 from database.save_metrics import save_metrics
 from vectorstore.azure_ai_search import Retriever
@@ -62,6 +63,11 @@ def ingest_document(
 
     print(f"Generated {len(chunks)} chunks for {pdf_file.name}")
 
+    #create index if not available
+    create_index(endpoint=os.getenv("AZURE_SEARCH_ENDPOINT"),
+            api_key=os.getenv("AZURE_SEARCH_API_KEY"),
+            index_name=os.getenv("AZURE_SEARCH_INDEX_NAME"))
+
     vector_store.upload_chunks(
         chunks=chunks, 
         embeddings=embeddings,
@@ -77,6 +83,7 @@ def ingest_document(
         year=int(year) if year.isdigit() else None
     )
 
+    # print(metrics)
     # Persist metrics to PostgreSQL
     if metrics:
         save_metrics(company=company, year=int(year) if str(year).isdigit() else None, metrics=metrics)
@@ -90,7 +97,7 @@ def ingest_directory(input_dir: str) -> None:
         model=os.getenv("AZURE_OPENAI_EMBEDDING_DEPLOYMENT"),
         azure_endpoint=os.getenv("AZURE_OPENAI_ENDPOINT"),
         api_key=os.getenv("AZURE_OPENAI_API_KEY"),
-        api_version=os.getenv("AZURE_OPENAI_API_VERSION")
+        api_version=os.getenv("AZURE_OPENAI_API_EMBEDDING_VERSION")
     )
 
     vector_store = AzureAISearchVectorStore(
@@ -99,7 +106,8 @@ def ingest_directory(input_dir: str) -> None:
         index_name=os.getenv("AZURE_SEARCH_INDEX_NAME")
     )
 
-    pdf_files = list(Path(input_dir).glob("*.pdf"))
+    # pdf_files = list(Path(input_dir).glob("*.pdf"))
+    pdf_files = list(Path(input_dir).glob("*Tesla.pdf"))  # only tesla pdf
 
     print(f"Found {len(pdf_files)} PDF(s)")
 

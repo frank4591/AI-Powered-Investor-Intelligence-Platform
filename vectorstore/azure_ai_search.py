@@ -38,7 +38,7 @@ class AzureAISearchVectorStore:
 
             documents.append(
                 {
-                    "id": str(uuid.uuid4()),
+                    "id": str(uuid.uuid4()), 
                     "company": company,
                     "year": year,
                     "source_file": source_file,
@@ -92,4 +92,4 @@ class Retriever:
         for result in results:
             content = result.get("content", "")
             documents.append(SimpleNamespace(page_content=content))
-        return documents
+        return documents

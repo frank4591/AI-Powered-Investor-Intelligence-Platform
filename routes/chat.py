@@ -1,11 +1,15 @@
 import os
 from fastapi import APIRouter, HTTPException
 from pydantic import BaseModel
-
+from dotenv import load_dotenv
 from vectorstore.azure_ai_search import AzureAISearchVectorStore, Retriever
 from llm.azure_openai import get_openai_client
+from llm.google_gemini import get_structured_completion, query_model
+from rag.kpi_extractor_rag import FinancialMetrics
 
+load_dotenv()
 router = APIRouter()
+
 
 class ChatRequest(BaseModel):
     question: str
@@ -40,12 +44,17 @@ async def chat(request: ChatRequest):
         # Build chat prompt – include retrieved context and the user question
         prompt = f"You are an expert financial analyst. Use the following context from corporate reports to answer the user's question. If the context does not contain relevant information, politely indicate that you do not have enough data.\n\nContext:\n{context}\n\nUser Question: {request.question}\n\nAnswer:"
 
-        client = get_openai_client()
-        response = client.chat.completions.create(
-            model=os.getenv("AZURE_OPENAI_CHAT_DEPLOYMENT"),
-            messages=[{"role": "user", "content": prompt}]
-        )
-        answer = response.choices[0].message.content
-        return {"answer": answer}
+        #use azure open ai model for querying llm
+        # client = get_openai_client()
+        # response = client.chat.completions.create(
+        #     model=os.getenv("AZURE_OPENAI_CHAT_DEPLOYMENT"),
+        #     messages=[{"role": "user", "content": prompt}]
+        # )
+        # answer = response.choices[0].message.content
+
+        #using gemini model for querying llm
+        response = query_model(prompt=prompt)
+
+        return {"answer": response}
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))

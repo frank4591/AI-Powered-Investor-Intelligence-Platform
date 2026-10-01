@@ -4,7 +4,8 @@ from types import SimpleNamespace
 from dotenv import load_dotenv
 from pydantic import BaseModel, field_validator, Field
 
-from llm.azure_openai import get_structured_completion
+# from llm.azure_openai import get_structured_completion
+from llm.google_gemini import get_structured_completion
 from vectorstore.azure_ai_search import AzureAISearchVectorStore
 
 load_dotenv()

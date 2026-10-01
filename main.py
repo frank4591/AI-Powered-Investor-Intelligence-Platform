@@ -2,6 +2,8 @@ from fastapi import FastAPI
 
 from routes.dashboard import router as dashboard_router
 from routes.health import router as health_router
+from routes.ingestion import router as ingestion_router
+from routes.chat import router as chat_router
 
 app = FastAPI(
     title="Investor Intelligence API",
@@ -11,6 +13,12 @@ app = FastAPI(
 app.include_router(
     health_router,
     tags=["Health"]
+)
+app.include_router(
+    chat_router,
+    prefix="/api",
+    tags=["chat"]
+
 )
 
 app.include_router(
