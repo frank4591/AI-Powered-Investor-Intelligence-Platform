@@ -1,6 +1,4 @@
-# AI-Powered Investor Intelligence Platform
-
-<img width="1906" height="945" alt="RAGproject" src="https://github.com/user-attachments/assets/5024af81-e07e-47ed-a4ab-a40c439522f2" />
+<img width="1917" height="997" alt="image" src="https://github.com/user-attachments/assets/9800e7a2-36b7-4b20-9fe5-83dec522b168" /># AI-Powered Investor Intelligence Platform
 
 This repository contains the Python backend for an AI-powered Investor Intelligence Platform, including document ingestion, semantic search, KPI extraction, Azure AI Search integration, Azure OpenAI integration, and PostgreSQL-based KPI storage.
 
