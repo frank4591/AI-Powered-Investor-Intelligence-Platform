@@ -2,6 +2,9 @@
 
 This repository contains the Python backend for an AI-powered Investor Intelligence Platform, including document ingestion, semantic search, KPI extraction, Azure AI Search integration, Azure OpenAI integration, and PostgreSQL-based KPI storage.
 
+## Link
+http://investorintelligence.eastus.cloudapp.azure.com/
+
 ## Prerequisites
 
 * Python 3.12+
